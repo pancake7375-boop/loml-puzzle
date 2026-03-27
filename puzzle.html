@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For You 💖</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: linear-gradient(135deg, #ffd6e7, #ffeef5);
+}
+
+h1 {
+    margin-top: 20px;
+    color: #ff4d88;
+}
+
+#puzzle {
+    width: 300px;
+    height: 300px;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+}
+
+.tile {
+    background: #ff99bb;
+    color: white;
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: 0.2s;
+}
+
+.tile:hover {
+    background: #ff6699;
+}
+
+.empty {
+    background: transparent;
+    cursor: default;
+}
+
+#message {
+    display: none;
+    font-size: 28px;
+    color: #ff3366;
+    margin-top: 20px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>Complete the Puzzle 🧩</h1>
+
+<div id="puzzle"></div>
+
+<div id="message">
+💖 u da real loml baby 💖
+</div>
+
+<script>
+
+let puzzle = document.getElementById("puzzle");
+let message = document.getElementById("message");
+
+let tiles = [1,2,3,4,5,6,7,8,""];
+
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+shuffle(tiles);
+
+function drawPuzzle() {
+    puzzle.innerHTML = "";
+
+    tiles.forEach((num, index) => {
+        let tile = document.createElement("div");
+        tile.classList.add("tile");
+
+        if (num === "") {
+            tile.classList.add("empty");
+        } else {
+            tile.textContent = num;
+            tile.onclick = () => moveTile(index);
+        }
+
+        puzzle.appendChild(tile);
+    });
+}
+
+function moveTile(index) {
+    let emptyIndex = tiles.indexOf("");
+
+    let validMoves = [
+        emptyIndex - 1,
+        emptyIndex + 1,
+        emptyIndex - 3,
+        emptyIndex + 3
+    ];
+
+    if (validMoves.includes(index)) {
+        [tiles[index], tiles[emptyIndex]] =
+        [tiles[emptyIndex], tiles[index]];
+
+        drawPuzzle();
+        checkWin();
+    }
+}
+
+function checkWin() {
+    let correct = [1,2,3,4,5,6,7,8,""];
+
+    if (JSON.stringify(tiles) === JSON.stringify(correct)) {
+        message.style.display = "block";
+    }
+}
+
+drawPuzzle();
+
+</script>
+
+</body>
+</html>
